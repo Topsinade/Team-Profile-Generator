@@ -1,0 +1,16 @@
+{
+  "name": "lib",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Employee.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "inquirer": "6.3",
+    "install": "^0.13.0",
+    "jest": "^29.7.0"
+  }
+}
