@@ -9,6 +9,11 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./src/page-template.js");
+const { mainModule } = require("process");
+const { run } = require("jest");
+
+
+const team = [];
 
 
 // TODO: Write Code to gather information about the development team members, and render the HTML file.
@@ -34,64 +39,60 @@ const manager =[
     message: "Enter Team Manager'sOffice number:",
     name: 'officeNumber',
   },
+
+
+];
+
+const menu = [
   {
     type: 'list',
-    message: 'Choose from the Menu',
+    message: 'Which team member do you want to add:',
     name: 'job',
     choices: ['Add an Engineer', 'Add an intern', 'Finish building the team'],
   },
-  {
-  type: 'input',
-   message: 'Please enter your Github Username:',
-   name: 'github',
-  }, 
+]
+
+
+const engineer =[
   {
     type: 'input',
-     message: 'Please enter your email:',
-     name: 'email',
-    }, 
-];
+    message: "Engineer's name: ",
+    name: 'name',
+  },
+  {
+    type: 'input',
+    message: "Enter Engineer's Employee ID",
+    name: 'id',
+  },
+  {
+    type: 'input',
+    message: "Enter Engineer's Github Username:",
+    name: 'github',
+  },
+]
 
-// const engineer =[
-//   {
-//     type: 'input',
-//     message: "Engineer's name: ",
-//     name: 'name',
-//   },
-//   {
-//     type: 'input',
-//     message: "Enter Engineer's Employee ID",
-//     name: 'id',
-//   },
-//   {
-//     type: 'input',
-//     message: "Enter Engineer's Github Username:",
-//     name: 'github',
-//   },
-// ]
-
-// const intern =[
-//   {
-//     type: 'input',
-//     message: "Intern's name: ",
-//     name: 'name',
-//   },
-//   {
-//     type: 'input',
-//     message: "Intern's Employee ID",
-//     name: 'id',
-//   },
-//   {
-//     type: 'input',
-//     message: "Enter Intern's Email:",
-//     name: 'email',
-//   },
-//   {
-//     type: 'input',
-//     message: "Enter Intern's School:",
-//     name: 'school',
-//   },
-// ]
+const intern =[
+  {
+    type: 'input',
+    message: "Intern's name: ",
+    name: 'name',
+  },
+  {
+    type: 'input',
+    message: "Intern's Employee ID",
+    name: 'id',
+  },
+  {
+    type: 'input',
+    message: "Enter Intern's Email:",
+    name: 'email',
+  },
+  {
+    type: 'input',
+    message: "Enter Intern's School:",
+    name: 'school',
+  },
+]
 
 
 
@@ -100,11 +101,48 @@ function writeToFile(fileName, data) {
 return fs.writeFileSync(path.join(process.cwd(), fileName), data);
 }
 
+function runMenu(){
+  inquirer.prompt(menu).then((responses)=>{
+    console.log(responses.job)
+    if(responses.job ==="Add an intern"){
+      inquirer.prompt(intern).then((responses)=>{
+        team.push(responses)
+        runMenu()
+      })  
+    }
+    if(responses.job ==="Add an Engineer"){
+      inquirer.prompt(engineer).then((responses) =>{
+        console.log(responses)
+        team.push(responses)
+        runMenu()
+      })
+    }
+    if(responses.job ==="Finish building the team"){
+      console.log("Team is done!")
+      console.log(team)
+    }
+  })
+}
+
+function generateTeamHTML() {
+const html = render(team);
+fs.writeFile(outputPath, html, (err) => {
+  if (err) {
+    console.error('Error writing to file:', err);
+  } else{
+    console.log("HTML file successfully created");
+  }
+})
+
+}
+
+
+
 // function to initialize program
 function init() {
 inquirer.prompt(manager).then((responses) => {
-  console.log("creating html file...");
-  writeToFile("./team.html", generateTeam({...responses}));
+  team.push(responses)
+  runMenu();
 });
 
 }
