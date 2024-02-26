@@ -1,8 +1,10 @@
 // creates the team
-const generateTeam = team => {
+const generateTeam = (team) => {
+    console.log("This is the team inside the function")
+    console.log(team)
 
     // creates the manager html
-    const generateManager = manager => {
+    const generateManager = (manager) => {
         return `
         <div class="card employee-card">
         <div class="card-header">
@@ -21,7 +23,7 @@ const generateTeam = team => {
     };
 
     // creates the html for engineers
-    const generateEngineer = engineer => {
+    const generateEngineer = (engineer) => {
         return `
         <div class="card employee-card">
     <div class="card-header">
@@ -40,7 +42,7 @@ const generateTeam = team => {
     };
 
     // creates the html for interns
-    const generateIntern = intern => {
+    const generateIntern = (intern) => {
         return `
         <div class="card employee-card">
     <div class="card-header">
@@ -116,28 +118,3 @@ module.exports = team => {
 </html>
     `;
 };
-
-
-
-
-// function generateTeamHTML() {
-//     const html = render(team);
-//     fs.writeFile(outputPath, html, (err) => {
-//       if (err) {
-//         console.error('Error writing to file:', err);
-//       } else {
-//         console.log(`Team HTML file has been successfully created at ${outputPath}`);
-//       }
-//     });
-//   }
-  
-//   // Function to initialize the program
-//   function init() {
-//     promptManager().then((managerInfo) => {
-//       team.push(managerInfo);
-//       runMenu();
-//     });
-//   }
-  
-//   // Initialize the program
-//   init();

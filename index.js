@@ -4,9 +4,10 @@ const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
+const generateTeam = require('./src/page-template.js')
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
-const outputPath = path.join(OUTPUT_DIR, "team.html");
+
 
 const render = require("./src/page-template.js");
 const { mainModule } = require("process");
@@ -66,10 +67,16 @@ const engineer =[
   },
   {
     type: 'input',
+    message: "Enter Engineer's Email:",
+    name: 'email',
+  },
+  {
+    type: 'input',
     message: "Enter Engineer's Github Username:",
     name: 'github',
   },
 ]
+
 
 const intern =[
   {
@@ -94,58 +101,50 @@ const intern =[
   },
 ]
 
-
-
-// function to write HTML file
-function writeToFile(fileName, data) {
-return fs.writeFileSync(path.join(process.cwd(), fileName), data);
-}
-
 function runMenu(){
   inquirer.prompt(menu).then((responses)=>{
     console.log(responses.job)
     if(responses.job ==="Add an intern"){
       inquirer.prompt(intern).then((responses)=>{
-        team.push(responses)
+        let teamMember = new Intern(responses.name, responses.id, responses.email, responses.school)
+        console.log(teamMember);
+        console.log(teamMember.getRole());
+        team.push(teamMember)
         runMenu()
       })  
     }
     if(responses.job ==="Add an Engineer"){
       inquirer.prompt(engineer).then((responses) =>{
         console.log(responses)
-        team.push(responses)
+        let teamMember = new Engineer(responses.name, responses.id, responses.email, responses.github)
+        console.log(teamMember);
+        console.log(teamMember.getRole());
+        team.push(teamMember)
         runMenu()
       })
     }
     if(responses.job ==="Finish building the team"){
-      console.log("Team is done!")
-      console.log(team)
+
+      console.log(team);
+    const teamHTML = generateTeam(team);
+    const outputPath = path.join(__dirname, 'output', 'team.html');
+    fs.writeFileSync(outputPath, teamHTML);
     }
   })
 }
 
-function generateTeamHTML() {
-const html = render(team);
-fs.writeFile(outputPath, html, (err) => {
-  if (err) {
-    console.error('Error writing to file:', err);
-  } else{
-    console.log("HTML file successfully created");
-  }
-})
-
-}
-
-
-
 // function to initialize program
 function init() {
 inquirer.prompt(manager).then((responses) => {
-  team.push(responses)
+  let teamMember = new Manager(responses.name, responses.id, responses.email, responses.officeNumber)
+  console.log(teamMember.getRole());
+  team.push(teamMember)
+  
   runMenu();
 });
 
 }
+
 
 // function call to initialize program
 init();
