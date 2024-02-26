@@ -48,6 +48,7 @@ The Team Generator is a command-line application that helps you build and manage
 - [Inquirer.js](https://www.npmjs.com/package/inquirer) - Command-line user interface
 - [Bootstrap](https://getbootstrap.com/) - Front-end framework for styling
 - [Font Awesome](https://fontawesome.com/) - Icon library
+- All tests pass using the [Jest package](https://www.npmjs.com/package/jest).
 
 ## Contributing
 
